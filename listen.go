@@ -12,9 +12,21 @@ var (
 
 func rdsClient() *redis.Client {
 	rdClient = redis.NewClient(&redis.Options{})
+	// ask about this client return
 	return rdClient
 }
 
 func main() {
-	fmt.Println("hello")
+	rdsClient()
+	listenTweets()
+}
+
+func listenTweets() {
+	pubsub := rdClient.Subscribe("tweetChannel")
+
+	ch := pubsub.Channel()
+
+	for msg := range ch {
+		fmt.Printf("tweet is: %s \n", msg.Payload)
+	}
 }
