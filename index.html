@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Twitter Client</title>
+	</head>
+	<body>
+		<button onclick="getTweets()">Get tweets</button>
+		<ul id="tweets">Tweets</ul>
+	</body>
+
+	<script>
+		let socket = new WebSocket("ws://127.0.0.1:8081/tweetStream")
+
+		socket.onopen = () => {
+			console.log("Successful connection")
+		}
+
+		socket.onmessage = (e) => {
+			let tweet = e.data
+			document.getElementById("tweets").innerHTML += '<li>' + tweet + '</li>'
+		}
+
+		function getTweets() {
+			let response = fetch('http://localhost:8080/stream')
+			console.log(response)
+		}
+	</script>
+</html>
